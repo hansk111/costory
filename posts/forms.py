@@ -21,5 +21,11 @@ class PostForm(forms.ModelForm):
 
         return title
 
+    def clean_content(self):
+        content = self.cleaned_data['content']
+        if '&' in content:
+            raise ValidationError('&는 포함 될수 없습니다.')
+
+        return content
 
 
