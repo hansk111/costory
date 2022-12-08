@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
 from .forms import PostForm
-
+from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
@@ -10,6 +10,12 @@ def index(request):
 
 def post_list(request):
     posts = Post.objects.all()
+    paginator = Paginator(posts, 6)
+    curr_page_number = request.GET.get('page')
+    if curr_page_number is None:
+      curr_page_number = 1
+    page = paginator.page(curr_page_number)
+    return render(request,'posts/post_list.html', {'page':page})
     context = {'posts': posts}
     return render(request, 'posts/post_list.html', context)
 
